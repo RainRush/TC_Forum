@@ -28,6 +28,12 @@
 				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 					<ul class="nav navbar-nav navbar-right">
 						<?php
+							$conn = mysql_connect("localhost", "root", "0000");
+							mysql_select_db("dan3388d") or die("Unable to connect to the server. Please try again later.");
+							mysql_query(" set names 'utf8' ");
+							mysql_query(" SET CHARACTER SET  'UTF8 '; ");
+							mysql_query('SET CHARACTER_SET_CLIENT=UTF8; ');
+							mysql_query('SET CHARACTER_SET_RESULTS=UTF8; ');
 							if($_SESSION['UID']!=NULL){
 						?>
 							<li>
@@ -35,13 +41,6 @@
 									<?php
 							 			echo "<font color=\"WHITE\">您好，</font>";
 							 			$UID = $_SESSION['UID'];
-							 			$Tag = $_GET['Tag'];
-							 			$conn = mysql_connect("localhost", "dan3388d", "dan3388d@ic@sql");
-										mysql_select_db("dan3388d") or die("Unable to connect to the server. Please try again later.");
-										mysql_query(" set names 'utf8' ");
-										mysql_query(" SET CHARACTER SET  'UTF8 '; ");
-										mysql_query('SET CHARACTER_SET_CLIENT=UTF8; ');
-										mysql_query('SET CHARACTER_SET_RESULTS=UTF8; ');
 							 			$GetName = mysql_query("SELECT * FROM USER WHERE UID = '$UID'");
 							 			$ls = mysql_fetch_row($GetName);
 							 			echo "<font color=\"WHITE\">".$ls[1]."</font>"; ;
@@ -74,6 +73,7 @@
 							</li>
 						<?php
 							}
+							$tag = $_GET['tag'];
 						?>
 					</ul>
 				</div>
@@ -86,18 +86,38 @@
 		<div class="col-md-8" align="center">
 			<br><br><br><br><br><br>
 			<table class="table">
-				<thead>
-					<tr>
-    				    <th></th>
-      				</tr>
-				</thead>
 				<tbody>
 					<tr class="info">
-						<th style="padding: 20px;"><?php echo $Tag?></th>
+						<?php
+							if($tag == 'news')
+								echo '<th style="padding: 20px;">新聞</th>';
+							else if($tag == 'discuss')
+								echo '<th style="padding: 20px;">綜合討論</th>';
+							else if($tag == 'blog')
+								echo '<th style="padding: 20px;">TC部落格</th>';
+							else if($tag == 'video')
+								echo '<th style="padding:20px;">影音討論</th>';
+						?>
+						<th></th>
 					</tr>
+					<?php
+						$data = mysql_query("SELECT * FROM ARTICLE WHERE tag = '$tag' AND aid IN (SELECT min(aid) FROM article GROUP BY tid) ORDER BY edit_time DESC");
+						$CountNo = mysql_num_rows($data);
+						for($i=0;$i<($CountNo);$i++){	
+							$ds = mysql_fetch_row($data);
+					?><!--start-->
 					<tr>
-						<th style="padding: 20px;"><a href="./main.php?tag=news"> - 新聞</a></th>
-					</tr>
+						<th style="padding: 20px;"><a href="./thread.php?tid=<?php echo $ds[4] ?>">
+						。 <?php echo $ds[1]?></th>
+						<th style="padding: 20px;float:right">文章數量：<?php
+							$data = mysql_query("SELECT * FROM article WHERE tid = '$ds[4]'");
+							$CountReply = mysql_num_rows($data);
+							echo $CountReply;
+						?></th>
+					</tr><!--end-->
+					<?php
+					}
+					?>
 				</tbody>
 			</table>
 		</div>
@@ -108,11 +128,11 @@
 	<div class="col-md-12">	 <!--確認表開始(下區)-->
 		<div class="col-md-6" align="left">
 			<br><br><br><br><br><br><br><br><br><br><br><br><br>
-			<p>&copy; TC Incubator</p>
+			<p>&copy; TC Incubator</p><br><br>
 		</div>
 		<div class="col-md-6" align="right">
 			<br><br><br><br><br><br><br><br><br><br><br><br><br>
-			<p>Powered by &copy; H.Y.Hu, 2015</p>
+			<p>Powered by &copy; H.Y.Hu, 2015</p><br><br>
 		</div>
 	</div>
 

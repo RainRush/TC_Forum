@@ -82,8 +82,8 @@
 								mysql_query('SET CHARACTER_SET_CLIENT=UTF8; ');
 								mysql_query('SET CHARACTER_SET_RESULTS=UTF8; ');
   								if (isset($_POST['register'])){
-									if($_POST['Name'] == NULL)
-										echo '<p style="color:red">請填入姓名</p>';
+									if($_POST['Username'] == NULL)
+										echo '<p style="color:red">請填入帳號</p>';
 									else if($_POST['Email'] == NULL)
 										echo '<p style="color:red">請填入電子信箱</p>';
 									else if($_POST['Password'] == NULL)
@@ -98,17 +98,24 @@
 										$row_check = mysql_fetch_assoc($result_check);
 										$check2 = "SELECT count(1) AS NameTimesCheck FROM User WHERE Username = '$_POST[Username]'";
 										$result_check2 = mysql_query($check2);
-										$row_check2 = mysql_fetch_assoc($check2);
+										$row_check2 = mysql_fetch_assoc($result_check2);
+										$data = mysql_query("SELECT * FROM User");
+										$CountUser = mysql_num_rows($data);
+										$UID = $CountUser + 1;
+										$CurrentDate = mysql_query("SELECT CURDATE()");
+										while($row=mysql_fetch_array($CurrentDate)){ 
+											$Join_Time = $row['CURDATE()'];
+										}
 										if($row_check['EmailTimesCheck'] == 1)
 											echo '<p style="color:red">此電子信箱已註冊</p>';
 										else if($row_check2['NameTimesCheck'] == 1)
 											echo '<p style="color:red">此帳號已有人使用</p>';
 										else{
-											$User = mb_convert_encoding($_POST['Username'], "UTF-8", "auto");
+											$Username = mb_convert_encoding($_POST['Username'], "UTF-8", "auto");
 											$Email = mb_convert_encoding($_POST['Email'], "UTF-8", "auto");
 											$Password = mb_convert_encoding($_POST['Password'], "UTF-8", "auto");
-											mysql_query(" INSERT INTO USER (Email,Name,Insti,Title,Phone,Password,Role) VALUES ('$Email', '$Name', '$Insti', '$Title', '$Phone', '$Password', 'Submitter')");
-											echo '<meta http-equiv="refresh" content="0 ; url=./main_login.php">';
+											mysql_query(" INSERT INTO USER (UID,Username,Password,Email,Join_Time,Role,Activate) VALUES ('$UID', '$Username', '$Password', '$Email', '$Join_Time', 'Junior TCer', '0')");
+											echo '<meta http-equiv="refresh" content="0 ; url=./index.php">';
 										}
 									}
 
@@ -123,9 +130,9 @@
 			<form class="form-horizontal" role="form" method="post">
 				<br><br><br><br><br><br><br><br><br><br>
 				<div class="form-group">
-					 <label for="Account" class="col-sm-4 control-label">帳號</label>
+					 <label for="Username" class="col-sm-4 control-label">帳號</label>
 					<div class="col-sm-5">
-						<input type="text" class="form-control" id="Account" name="Account" placeholder="請輸入帳號">
+						<input type="text" class="form-control" id="Username" name="Username" placeholder="請輸入帳號">
 					</div>
 				</div>
 				<div class="form-group">
@@ -136,22 +143,18 @@
 				</div>
 				<?php
 				if (isset($_POST['login'])){
-					$Account = "$_POST[Account]";
-					$_SESSION['Account'] = $Account;
+					$Username = "$_POST[Username]";
 					$Password = "$_POST[Password]";
-					$sql = "SELECT * FROM USER_DATA WHERE Account = '$Account'";
+					$sql = "SELECT * FROM USER WHERE Username = '$Username'";
 					$result = mysql_query($sql);
 					$row = mysql_fetch_row($result);
-					$_SESSION['User_No'] = $row[0];
-					if($Account != null && $Password != null && $row[1] == $Account && $row[2] == $Password){
-						$_SESSION['Account'] = $Account;
-						if($row[4] == '2')
-							echo '<meta http-equiv=REFRESH CONTENT=0;url=./main.php>';
-						else if($row[4] == '1')
-							echo '<meta http-equiv=REFRESH CONTENT=0;url=./mid_main.php>';
-						else if($row[4] == '0')
-							echo '<meta http-equiv=REFRESH CONTENT=0;url=./head_main.php>';
+					$_SESSION['UID'] = $row[0];
+					if($Username != null && $Password != null && $row[1] == $Username && $row[2] == $Password && $row[6] != '0'){
+						$_SESSION['Username'] = $Username;
+						echo '<meta http-equiv=REFRESH CONTENT=0;url=./index.php>';
 					}
+					else if($row[6] == '0')
+						echo '<p style="color:red">尚未至Email信箱啟動</p>';
 					else
 						echo '<p style="color:red">帳號或密碼有誤</p>';
   				}
@@ -167,11 +170,11 @@
 	<div class="col-md-12">	 <!--確認表開始(下區)-->
 		<div class="col-md-6" align="left">
 			<br><br><br><br><br><br><br><br><br><br><br><br><br>
-			<p>&copy; TC Incubator</p>
+			<p>&copy; TC Incubator</p><br><br>
 		</div>
 		<div class="col-md-6" align="right">
 			<br><br><br><br><br><br><br><br><br><br><br><br><br>
-			<p>Powered by &copy; H.Y.Hu, 2015</p>
+			<p>Powered by &copy; H.Y.Hu, 2015</p><br><br>
 		</div>
 	</div>
 </div>
