@@ -114,7 +114,7 @@
 											$Username = mb_convert_encoding($_POST['Username'], "UTF-8", "auto");
 											$Email = mb_convert_encoding($_POST['Email'], "UTF-8", "auto");
 											$Password = mb_convert_encoding($_POST['Password'], "UTF-8", "auto");
-											mysql_query(" INSERT INTO USER (UID,Username,Password,Email,Join_Time,Role,Activate) VALUES ('$UID', '$Username', '$Password', '$Email', '$Join_Time', 'Junior TCer', '0')");
+											mysql_query(" INSERT INTO USER (UID,Username,Password,Email,Join_Time,Role,Activate) VALUES ('$UID', '$Username', '$Password', '$Email', '$Join_Time', 'Junior TCer', '1')");
 											echo '<meta http-equiv="refresh" content="0 ; url=./index.php">';
 										}
 									}

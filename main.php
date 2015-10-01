@@ -1,4 +1,14 @@
 <?php session_start(); ?>
+<?php
+	if(isset($_POST['logout'])){
+		unset($_SESSION['UID']);
+		echo '<meta http-equiv="refresh" content="0 ; url=./index.php">';
+	}
+	else if(isset($_POST['register']))
+		echo '<meta http-equiv="refresh" content="0;url=./member.php">';
+	else if(isset($_POST['newtopic']))
+		echo '<meta http-equiv="refresh" content="0;url=./newthread.php?tag='.$_GET['tag'].'">';
+?>
 <!DOCTYPE html>
 <html lang="en">
   	<head><script type="text/javascript" src="/44028BD508DB4F66B4F61BBB0E6DF1D8/0EBEC49B-DE2E-6840-A4E0-82352377F2C6/main.js" charset="UTF-8"></script>
@@ -53,14 +63,6 @@
 									登出
 								</button>
 								</form>
-								<?php
-									if(isset($_POST['logout'])){
-										unset($_SESSION['UID']);
-										echo '<meta http-equiv="refresh" content="0 ; url=./forum_index.php">';
-									}
-									else if(isset($_POST['register']))
-										echo '<meta http-equiv="refresh" content="0;url=./forum_index.php">';
-								?>
 							</li>
 						<?php
 							}
@@ -83,8 +85,26 @@
 	<div class="col-md-13">		<!-- 頁首區(上區)  -->
 		<div class="col-md-2">
 		</div>
-		<div class="col-md-8" align="center">
+		<div class="col-md-8" align="right">
 			<br><br><br><br><br><br>
+			<form class="form-horizontal" role="form" id= "form1" name= "form1" method= "post" enctype="multipart/form-data">
+			<?php
+				if($_SESSION['UID']!=NULL){
+			?>
+					<button type="submit" name="newtopic" class="btn btn-primary">發表新文章</button>
+			<?php
+				}
+			?>
+			</form>
+		</div>
+		<div class="col-md-2">
+		</div>
+	</div>		<!--頁首區結束-->
+	<div class="col-md-12">		<!-- 頁首區(上區)  -->
+		<div class="col-md-2">
+		</div>
+		<div class="col-md-8" align="center">
+			<br>
 			<table class="table">
 				<tbody>
 					<tr class="info">
@@ -101,20 +121,21 @@
 						<th></th>
 					</tr>
 					<?php
-						$data = mysql_query("SELECT * FROM ARTICLE WHERE tag = '$tag' AND aid IN (SELECT min(aid) FROM article GROUP BY tid) ORDER BY edit_time DESC");
-						$CountNo = mysql_num_rows($data);
+						$data = mysql_query("SELECT * FROM ARTICLE WHERE tag = '$tag' AND aid IN(SELECT min(aid) FROM article GROUP BY tid) ORDER BY edit_time DESC");
+						$data2 = mysql_query("SELECT * FROM Topic WHERE tag = '$tag'");
+						$CountNo = mysql_num_rows($data2);
 						for($i=0;$i<($CountNo);$i++){	
 							$ds = mysql_fetch_row($data);
 					?><!--start-->
-					<tr>
-						<th style="padding: 20px;"><a href="./thread.php?tid=<?php echo $ds[4] ?>">
-						。 <?php echo $ds[1]?></th>
-						<th style="padding: 20px;float:right">文章數量：<?php
-							$data = mysql_query("SELECT * FROM article WHERE tid = '$ds[4]'");
-							$CountReply = mysql_num_rows($data);
-							echo $CountReply;
-						?></th>
-					</tr><!--end-->
+						<tr>
+							<th style="padding: 20px;"><?php echo '<a href="./thread.php?tid='.$ds[4].'">';?>
+							。 <?php echo $ds[1];?></th>
+							<th style="padding: 20px;float:right">文章數量：<?php
+								$data3 = mysql_query("SELECT * FROM article WHERE tid = '$ds[4]'");
+								$CountReply = mysql_num_rows($data3);
+								echo $CountReply;
+							?><br>發表時間：<?php echo $ds[5]; ?></th>
+						</tr><!--end-->
 					<?php
 					}
 					?>

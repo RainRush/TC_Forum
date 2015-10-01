@@ -1,21 +1,21 @@
 <?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="en">
-  	<head><script type="text/javascript" src="/44028BD508DB4F66B4F61BBB0E6DF1D8/0EBEC49B-DE2E-6840-A4E0-82352377F2C6/main.js" charset="UTF-8"></script>
-    	<meta charset="utf-8">
-    	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-    	<meta name="viewport" content="width=device-width, initial-scale=1">
-    	<meta name="description" content="Source code generated using layoutit.com">
-    	<meta name="author" content="H.Y.Hu">
+	<head><script type="text/javascript" src="/44028BD508DB4F66B4F61BBB0E6DF1D8/0EBEC49B-DE2E-6840-A4E0-82352377F2C6/main.js" charset="UTF-8"></script>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="description" content="Source code generated using layoutit.com">
+		<meta name="author" content="H.Y.Hu">
 	
-    	<title>TC創業論壇</title>
-    	<link href="css/bootstrap.min.css" rel="stylesheet">
-    	<link href="css/style.css" rel="stylesheet">
-    	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-  		<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-  	</head>
-  <body>
+		<title>TC創業論壇</title>
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+		<link href="css/style.css" rel="stylesheet">
+		<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+		<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+	</head>
+	<body>
 <div class="container">
 	<div class="row">	<!--navbar開始-->
 		<div class="col-md-12">
@@ -91,8 +91,10 @@
 						<th style="padding: 20px;float:right">文章數量：<?php
 							$NewsData = mysql_query("SELECT * FROM article WHERE tag = 'news'");
 							$CountNews = mysql_num_rows($NewsData);
+							$NewsTop = mysql_query("SELECT * FROM topic WHERE tag = 'news'");
+							$CountTopNews = mysql_num_rows($NewsTop);
 							echo $CountNews;
-						?></th>
+						?><br>討論主題：<?php echo $CountTopNews;?></th>
 					</tr>
 					<tr>
 						<th style="padding: 20px;"><a href="./main.php?tag=discuss"> - 綜合討論</a></th>
@@ -100,8 +102,10 @@
 						<th style="padding: 20px;float:right">文章數量：<?php
 							$DiscussData = mysql_query("SELECT * FROM article WHERE tag = 'discuss'");
 							$CountDiscuss = mysql_num_rows($DiscussData);
+							$DiscussTop = mysql_query("SELECT * FROM topic WHERE tag = 'discuss'");
+							$CountTopDiscuss = mysql_num_rows($DiscussTop);
 							echo $CountDiscuss;
-						?></th>
+						?><br>討論主題：<?php echo $CountTopDiscuss;?></th>
 					</tr>
 					<tr class="info">
 						<th style="padding: 20px;">TC</th>
@@ -114,17 +118,21 @@
 						<th style="padding: 20px;float:right">文章數量：<?php
 							$BlogData = mysql_query("SELECT * FROM article WHERE tag = 'blog'");
 							$CountBlog = mysql_num_rows($BlogData);
+							$BlogTop = mysql_query("SELECT * FROM topic WHERE tag = 'blog'");
+							$CountTopBlog = mysql_num_rows($BlogTop);
 							echo $CountBlog;
-						?></th>
+						?><br>討論主題：<?php echo $CountTopBlog;?></th>
 					</tr>
 					<tr>
-						<th style="padding: 20px;"><a href="./main.php?tag=4"> - 影音討論</a></th>
+						<th style="padding: 20px;"><a href="./main.php?tag=video"> - 影音討論</a></th>
 						<th style="padding: 20px;"></th>
 						<th style="padding: 20px;float:right">文章數量：<?php
-							$VideoData = mysql_query("SELECT * FROM article WHERE tag = 'blog'");
+							$VideoData = mysql_query("SELECT * FROM article WHERE tag = 'video'");
 							$CountVideo = mysql_num_rows($VideoData);
+							$VideoTop = mysql_query("SELECT * FROM topic WHERE tag = 'video'");
+							$CountTopVideo = mysql_num_rows($VideoTop);
 							echo $CountVideo;
-						?></th>
+						?><br>討論主題：<?php echo $CountTopVideo;?></th>
 					</tr>
 				</tbody>
 			</table>

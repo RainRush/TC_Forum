@@ -136,11 +136,14 @@
 				</tbody>
 			</table>
 			<form class="form-horizontal" role="form" id= "form1" name= "form1" method= "post" enctype="multipart/form-data">
+				<?php
+					if($_SESSION['UID']!=NULL){
+				?>
 				<table border="0" cellspacing="0" cellpadding="5" class="tborder">
 					<thead>
 						<tr>
 							<td class="thead" colspan="2" style="background:#6495ED;border-radius: 3px;text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.2);padding: 10px;height: 25px;color: #fff;font-size: 14px;font-weight: lighter;">
-								<div><strong>Quick Reply</strong></div>
+								<div><strong>快速回覆</strong></div>
 							</td>
 						</tr>
 					</thead>
@@ -157,6 +160,9 @@
 						</tr>
 					</tbody>
 				</table>
+				<?php
+					}
+				?>
 			</form>
 		</div>
 		<div class="col-md-2">
